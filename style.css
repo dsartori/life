@@ -1,0 +1,82 @@
+body {
+  overflow: hidden;
+  background: #333333;
+  color: #fff;
+  font-family: Ubuntu;
+  font-size:16px;
+  height:100vh;
+  width:100vw;
+}
+
+h1 {
+  text-align: center;
+}
+
+p {
+  font-size:12px;
+}
+
+li{
+  font-size:12px;
+}
+
+.acknowledgements{
+  font-size:50%;
+
+}
+select{
+  font-family: Ubuntu;
+  font-size: 24px;
+  vertical-align: top;
+  background: #cccccc;
+  border:0;
+}
+
+select option{
+  background: #cccccc;
+  font-size: 24px;
+}
+
+.overlay{
+  display: none;
+  background-color: #000000;
+  z-index: 2;
+  cursor: pointer;
+  width: 90%;
+  margin: auto;
+}
+
+.wrapper {
+  overflow: auto;
+  margin: auto;
+  border: 2px;
+  width: 90%;   
+  height: 100%;
+  height: -webkit-calc(100% - 150px);
+  height: -moz-calc(100% - 150px);
+  height: calc(100% - 150px);
+  border-style: double;
+  border-color: black;
+}
+
+.controls {
+  overflow: auto;
+  background:#cccccc;
+  margin: auto;
+  width: 90%;
+  border: 2px;
+  border-style: double;
+  border-color: black;
+}
+
+.dimensions {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: #fff;
+  color: #222;
+  padding: 10px;
+  border-radius: 5px;
+  opacity: 0.5;
+}
+

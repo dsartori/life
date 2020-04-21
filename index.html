@@ -1,0 +1,47 @@
+<html>
+<head>
+	<script type="text/javascript" src="main.js" defer></script>
+	<script type="text/javascript" src="life.js"></script>
+	<link rel="stylesheet" href="style.css" type="text/css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu" />
+</head>
+<body>
+
+<h1>John Conway's Game Of Life</h1>
+<div id="controls" class="controls">
+	<input type="image" id="step" alt="step" src="img/step.svg">
+	<input type="image" id="play" alt="play" src="img/play.svg">
+	<input type="image" id="ffwd" alt="ffwd" src="img/fastforward.svg">
+	<input type="image" id="pause" alt="pause" src="img/pause.svg">
+	<select id="presets"></select>
+	<input type="image" id="restart" alt="restart" src="img/refresh.svg">
+	<input type="image" id="help" alt="help" src="img/question.svg">
+</div>
+<div id="overlay" class="overlay"><h2>Overview</h2>
+	    <p>This is an implementation of John Conway’s Game of Life. In Life, “cells” live on a two-dimensional grid and survive, reproduce, and die based on four rules:
+    <ul>
+        <li>Any live cell with fewer than two live neighbours dies.</li>
+    <li>Any live cell with more than three live neighbours dies.</li>
+    <li>Any live cell with two or three live neighbours lives on.</li>
+    <li>Any dead cell with exactly three live neighbours becomes a live cell.</li>
+        </ul>
+        <h2>Controls</h2>
+        <p>Click or tap a cell on the board to toggle it's state. The board is larger than the view window. Scroll using gestures or the scroll bars. Select a starting pattern to use from the dropdown box.</p>
+        <ul style="list-style-type:none">
+        	<li><img src="img/step.svg" height=32px> Advance the simulation one step.</li>
+        	<li><img src="img/play.svg" height=32px > Play the simulation forward at 1x speed</li>
+        	<li><img src="img/fastforward.svg" height=32px> Play the simulation forward at 4x speed</li>
+        	<li><img src="img/pause.svg" height=32px> Pause the simulation</li>
+        	<li><img src="img/refresh.svg" height=32px> Load the selected board setup</li>
+        	<li><img src="img/question.svg" height=32px> Toggle this help screen</li>
+        </ul>
+
+</p>
+<p>Code by Doug Sartori © 2020 based on "SimpleLife" © 2009. See license file for terms.</p>
+<p>Icons by © 2014 Andreas Kainz &amp; Uri Herrera &amp; Andrew Lake &amp; Marco Martin &amp; Harald Sitter &amp; Jonathan Riddell &amp; Ken Vermette &amp; Aleix Pol &amp; David Faure &amp; Albert Vaca &amp; Luca Beltrame &amp; Gleb Popov &amp; Nuno Pinheiro &amp; Alex Richardson &amp; Jan Grulich &amp; Bernhard Landauer &amp; Heiko Becker &amp; Volker Krause &amp; David Rosca &amp; Phil Schaf&nbsp;/&nbsp;KDE, <a href="http://www.gnu.org/licenses/lgpl.html" title="GNU Lesser General Public License">LGPL</a>, <a href="https://commons.wikimedia.org/wiki/Breeze_icons">Link</a></p>
+</div>
+<div id="canvas-wrapper" class="wrapper">
+
+</div>
+
+</body>
