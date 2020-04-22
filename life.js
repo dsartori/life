@@ -324,8 +324,6 @@ function Grid(x,y){
       ["13","9"],
       ["13","10"]]};
 
-      console.log(Object.keys(this.presets));
-
 }
 
 
