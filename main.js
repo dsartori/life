@@ -9,7 +9,7 @@ function setup()
     cellsize = 80;
   }
 
-  boardsize = 80;
+  boardsize = 40;
   interval = 100;
 
   document.getElementById('play').addEventListener('click',play)
