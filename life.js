@@ -1,3 +1,6 @@
+// Life.js (c) 2020 Douglas Sartori, Esquire
+
+
 // cell object
 function Cell(){
   this.state = 0;
