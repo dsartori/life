@@ -4,26 +4,47 @@
 function setup()
 {
   gamestate = 0;
-  cellsize = 40;
-  if (window.mobileCheck()){
-    cellsize = 80;
+  baseCellSize = 0;
+  controlIconSize = 0;
+  zoomLevel = 1.0;
+  minZoom = 0.3;
+  maxZoom = 1.6;
+  gridWidth = 250;  
+  gridHeight = 250;
+  viewportX = 0;
+  viewportY = 0;
+  if (window.mobileCheck()) {
+    baseCellSize = 80;
+    controlIconSize = 50;
+  } else {
+    baseCellSize = 40;
+    controlIconSize = 40;
   }
 
-  boardsize = 40;
+  
+  // Calculate effective cell size
+  cellsize = baseCellSize * zoomLevel;
   interval = 100;
 
   document.getElementById('play').addEventListener('click',play)
-  document.getElementById('play').style.height = cellsize+'px';
+  document.getElementById('play').style.height = controlIconSize + 'px';
   document.getElementById('pause').addEventListener('click',pause);
-  document.getElementById('pause').style.height = cellsize+'px';
+  document.getElementById('pause').style.height = controlIconSize + 'px';
   document.getElementById('step').addEventListener('click',step);
-  document.getElementById('step').style.height = cellsize+'px';
+  document.getElementById('step').style.height = controlIconSize + 'px';
   document.getElementById('ffwd').addEventListener('click',ffwd);
-  document.getElementById('ffwd').style.height = cellsize+'px';
+  document.getElementById('ffwd').style.height = controlIconSize + 'px';
   document.getElementById('restart').addEventListener('click',restart);
-  document.getElementById('restart').style.height = cellsize+'px';
+  document.getElementById('restart').style.height = controlIconSize + 'px';
   document.getElementById('help').addEventListener('click',help);
-  document.getElementById('help').style.height = cellsize+'px'
+  document.getElementById('help').style.height = cellsize+'px';
+  document.getElementById('zoomIn').style.height = cellsize+'px';
+  document.getElementById('zoomOut').style.height = cellsize+'px';
+  document.getElementById('resetZoom').style.height = cellsize+'px';
+  
+  document.getElementById('zoomIn').addEventListener('click', zoomIn);
+  document.getElementById('zoomOut').addEventListener('click', zoomOut);
+  document.getElementById('resetZoom').addEventListener('click', resetZoom);
   
   emptyCell = new Image();
   emptyCell.src = 'img/empty.png';
@@ -33,7 +54,8 @@ function setup()
 
 
   var canvas_wrapper = document.getElementById('canvas-wrapper');
-  canvas_wrapper.innerHTML = '<canvas id="board" width= "' + boardsize*cellsize + '" height="'+ boardsize*cellsize +'"></canvas>';
+  // Use dynamic grid size and account for viewport
+  canvas_wrapper.innerHTML = '<canvas id="board" width= "' + gridWidth*cellsize + '" height="'+ gridHeight*cellsize +'"></canvas>';
   var canvas = document.getElementById('board');
   canvas.addEventListener("mousedown",function(e){
     handleClick(canvas,e);
@@ -50,22 +72,64 @@ function setup()
 
 }
 
+
 var render = function()
 {
-
-  // board
-  for (i=0; i<grid.gridXsize; i++){
-    for(j = 0; j<grid.gridYsize; j++){
-      if (grid.positions[i][j].state){
-        c.drawImage(cell,i*cellsize,j*cellsize,cellsize,cellsize);
-      }else{
-        c.drawImage(emptyCell,i*cellsize,j*cellsize,cellsize,cellsize);
-      }
+  if (gamestate) {
+    console.time('render');
+  }
+  // Clear main canvas
+  c.clearRect(0, 0, c.canvas.width, c.canvas.height);
+  
+  // Calculate visible area based on viewport
+  const startX = Math.max(0, Math.floor(viewportX / cellsize));
+  const startY = Math.max(0, Math.floor(viewportY / cellsize));
+  const endX = Math.min(grid.gridXsize, startX + Math.ceil(c.canvas.width / cellsize) + 1);
+  const endY = Math.min(grid.gridYsize, startY + Math.ceil(c.canvas.height / cellsize) + 1);
+  
+  // Clear canvas
+  c.clearRect(0, 0, c.canvas.width, c.canvas.height);
+  // Fill background with white
+  c.fillStyle = '#ffffff';
+  c.fillRect(0, 0, c.canvas.width, c.canvas.height);
+  
+  // Draw gridlines
+  c.strokeStyle = '#c2c2c2';
+  c.lineWidth = 4 * (cellsize / 20); 
+  c.beginPath();
+  
+  // Vertical lines 
+  for (let x = 0; x <= gridWidth * cellsize; x += cellsize) {
+    c.moveTo(x + 0.5, 0);
+    c.lineTo(x + 0.5, gridHeight * cellsize);
+  }
+  
+  // Horizontal lines 
+  for (let y = 0; y <= gridHeight * cellsize; y += cellsize) {
+    c.moveTo(0, y + 0.5);
+    c.lineTo(gridWidth * cellsize, y + 0.5);
+  }
+  
+  c.stroke();
+  
+  // Draw visible live cells
+  for (const liveCell of grid.currentState) {
+    const [x, y] = liveCell.split(',').map(Number);
+    if (x >= startX && x < endX && y >= startY && y < endY) {
+      const drawX = x * cellsize - viewportX;
+      const drawY = y * cellsize - viewportY;
+      c.drawImage(cell, drawX, drawY, cellsize, cellsize);
     }
   }
 
   if (gamestate){
+    console.time('nextStep');
     grid.nextStep();
+    console.timeEnd('nextStep');
+    
+  }
+  if (gamestate) {
+    console.timeEnd('render');
   }
 }
 
@@ -83,15 +147,29 @@ function populateSelect(){
     i++;
   }
   select.selectedIndex=s;
-}
 
+  document.getElementById("presets").addEventListener('change', function() {
+    if (confirm('Changing the pattern will reset the game. Apply new pattern?')) {
+      restart();
+    }
+  });
+}
 function handleClick(c,e){
   var rect = c.getBoundingClientRect();
-  var x = Math.floor((event.clientX - rect.left)/cellsize);
-  var y = Math.floor((event.clientY - rect.top)/cellsize);
+  // Account for viewport and zoom
+  const gridX = Math.floor((e.clientX - rect.left + viewportX) / cellsize);
+  const gridY = Math.floor((e.clientY - rect.top + viewportY) / cellsize);
+
+  var x = Math.max(0, Math.min(gridX, grid.gridXsize - 1));
+  var y = Math.max(0, Math.min(gridY, grid.gridYsize - 1));
   console.log(x,y);
   if (!gamestate){
-    grid.positions[x][y].state = !(grid.positions[x][y].state);
+  const cell = `${x},${y}`;
+  if (grid.currentState.has(cell)) {
+    grid.currentState.delete(cell);
+  } else {
+    grid.currentState.add(cell);
+  }
   }
 }
 
@@ -101,14 +179,12 @@ function resized(){
 }
 
 function play(){
- //document.getElementById("step").style.background ="#444444";
   interval = 400;
   gamestate = 1;
 }
 
 function pause(){
 
-  //document.getElementById("step").style.background = "#cccccc";
   interval = 100;
   gamestate = 0;
 }
@@ -138,6 +214,44 @@ function help(){
   document.getElementById("overlay").style.display="block";
 }
 }
+
+// Zoom functions
+function zoomIn() {
+  zoomLevel = Math.min(zoomLevel * 1.2, maxZoom);
+  console.log("Zoom level: " + zoomLevel);
+  applyZoom();
+}
+
+function zoomOut() {
+  zoomLevel = Math.max(zoomLevel / 1.2, minZoom);
+  console.log("Zoom level: " + zoomLevel);
+  applyZoom();
+}
+
+function resetZoom() {
+  zoomLevel = 1.0;
+  applyZoom();
+}
+
+function applyZoom() {
+  // Update cell size based on new zoom level
+  cellsize = baseCellSize * zoomLevel;
+  
+  const canvas = document.getElementById('board');
+  canvas.width = gridWidth * cellsize;
+  canvas.height = gridHeight * cellsize;
+  
+  const displayWidth = c.canvas.width;
+  const displayHeight = c.canvas.height;
+  
+  const maxViewportX = Math.max(0, canvas.width - displayWidth);
+  const maxViewportY = Math.max(0, canvas.height - displayHeight);
+  
+  viewportX = Math.min(viewportX, maxViewportX);
+  viewportY = Math.min(viewportY, maxViewportY);
+  
+  render();
+}
 // https://stackoverflow.com/questions/11381673/detecting-a-mobile-browser
 function mobileCheck(){
   let check = false;
@@ -150,7 +264,7 @@ setup();
 
 window.addEventListener( 'resize', resized );
 
-grid = new Grid(boardsize,boardsize);
+grid = new Grid(gridWidth, gridHeight);
 coords = grid.presets['glider'];
 grid.loadGrid(coords);
 populateSelect();

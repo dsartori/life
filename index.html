@@ -9,13 +9,30 @@
 
 <h1>John Conway's Game Of Life</h1>
 <div id="controls" class="controls">
-	<input type="image" id="step" alt="step" src="img/step.svg">
-	<input type="image" id="play" alt="play" src="img/play.svg">
-	<input type="image" id="ffwd" alt="ffwd" src="img/fastforward.svg">
-	<input type="image" id="pause" alt="pause" src="img/pause.svg">
-	<select id="presets"></select>
-	<input type="image" id="restart" alt="restart" src="img/refresh.svg">
-	<input type="image" id="help" alt="help" src="img/question.svg">
+	<div class="control-group">
+		<span class="label">Simulation</span>
+		<input type="image" id="step" alt="step" src="img/step.svg">
+		<input type="image" id="play" alt="play" src="img/play.svg">
+		<input type="image" id="ffwd" alt="ffwd" src="img/fastforward.svg">
+		<input type="image" id="pause" alt="pause" src="img/pause.svg">
+	</div>
+	<div class="separator"></div>
+	<!-- Zoom controls -->
+	<div class="control-group">
+		<span class="label">Zoom</span>
+		<input type="image" id="zoomIn" alt="zoom in" src="img/zoomin.svg">
+		<input type="image" id="zoomOut" alt="zoom out" src="img/zoomout.svg">
+		<input type="image" id="resetZoom" alt="reset zoom" src="img/zoomreset.svg">
+	</div>
+	<div class="separator"></div>
+	<div class="control-group">
+		<span class="label">Pattern</span>
+		<select id="presets"></select>
+		<input type="image" id="restart" alt="restart" src="img/refresh.svg">
+	</div>
+	<div class="control-group">
+		<input type="image" id="help" alt="help" src="img/question.svg">
+	</div>
 </div>
 <div id="overlay" class="overlay"><h2>Overview</h2>
 	    <p>This is an implementation of John Conway’s Game of Life. In Life, “cells” live on a two-dimensional grid and survive, reproduce, and die based on four rules:
@@ -34,7 +51,11 @@
         	<li><img src="img/pause.svg" height=32px> Pause the simulation</li>
         	<li><img src="img/refresh.svg" height=32px> Load the selected board setup</li>
         	<li><img src="img/question.svg" height=32px> Toggle this help screen</li>
+        	<li><img src="img/zoomin.svg" height=32px> Zoom in (make cells larger)</li>
+        	<li><img src="img/zoomout.svg" height=32px> Zoom out (make cells smaller)</li>
+        	<li><img src="img/zoomreset.svg" height=32px> Reset zoom to default</li>
         </ul>
+        <p>The grid is now larger than before. Use scrollbars or drag to pan around the grid.</p>
 
 </p>
 <p>Code by Doug Sartori © 2020 based on "SimpleLife" © 2009. See license file for terms.</p>
