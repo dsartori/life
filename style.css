@@ -39,11 +39,16 @@ select option{
 
 .overlay{
   display: none;
-  background-color: #000000;
+  background-color: rgba(0, 0, 0, 0.85);
   z-index: 2;
   cursor: pointer;
+  position: absolute;
+  top: 120px;
+  left: 5.75%;
   width: 90%;
-  margin: auto;
+  height: calc(100% - 150px);
+  margin: 0;
+  padding: 0;
 }
 
 .wrapper {
@@ -78,5 +83,59 @@ select option{
   padding: 10px;
   border-radius: 5px;
   opacity: 0.5;
+}
+
+/* Make control icons white */
+#controls input[type="image"] {
+    filter: brightness(0);
+}
+
+.separator {
+    width: 1px;
+    background-color: #000;
+    margin: 0 10px;
+    height: 32px;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.label {
+    font-size: 14px;
+    color: #000;
+    margin-top: 2px;
+    white-space: nowrap;
+}
+
+select {
+    background: #ffffff;
+    border: 1px solid #999;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+    border-radius: 4px;
+    padding: 3px 6px;
+    margin-top: 2px;
+}
+
+.controls {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    background:#cccccc;
+    margin: auto;
+    width: 90%;
+    border: 2px;
+    border-style: double;
+    border-color: black;
+    padding: 5px 0;
+}
+
+.controls > .control-group:last-child {
+    margin-left: auto;
 }
 
