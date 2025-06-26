@@ -1,11 +1,9 @@
 // Life.js (c) 2020 Douglas Sartori
 
-// grid object
 function Grid(x,y){
   this.gridXsize = x;
   this.gridYsize = y;
   
-  // Use sparse sets to store live cells for better performance
   this.currentState = new Set();
   this.nextState = new Set();
   
@@ -198,7 +196,6 @@ Grid.prototype.nextStep = function(){
     }
   }
   
-  // Swap state arrays
   const temp = this.currentState;
   this.currentState = this.nextState;
   this.nextState = temp;

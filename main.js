@@ -12,22 +12,17 @@ function setup()
   gridWidth = 250;  
   gridHeight = 250;
 
-  // Device type detection using user agent with enhanced pattern
+  // Device type detection 
   const isMobile = /Mobile|Android|iPhone|iPad|iPod|iOS/i.test(navigator.userAgent);
-  
-  // Log detailed device information for troubleshooting
-  console.log("User Agent:", navigator.userAgent);
-  console.log("Is mobile device:", isMobile);
+
 
   // Adjust grid size for mobile devices to prevent canvas size warnings
   if (isMobile) {
-    // Conservative grid size reduction to ensure safety
-    gridWidth = 80;   // Further reduced for iPhone 16's screen
+    gridWidth = 80;   
     gridHeight = 80;
     
-    // Conservative cell size and zoom settings
-    zoomLevel = 1.0;  // Further reduced base zoom
-    maxZoom = 1.6;    // Limited zoom capability
+    zoomLevel = 1.0;  
+    maxZoom = 1.6;    
     minZoom = 0.2;
   }
   
@@ -69,7 +64,6 @@ function setup()
 
 
   var canvas_wrapper = document.getElementById('canvas-wrapper');
-  // Use dynamic grid size and account for viewport
   canvas_wrapper.innerHTML = '<canvas id="board" width= "' + gridWidth*cellsize + '" height="'+ gridHeight*cellsize +'"></canvas>';
   var canvas = document.getElementById('board');
   canvas.addEventListener("mousedown",function(e){
@@ -171,7 +165,6 @@ function populateSelect(){
 }
 function handleClick(c,e){
   var rect = c.getBoundingClientRect();
-  // Account for viewport and zoom
   const gridX = Math.floor((e.clientX - rect.left + viewportX) / cellsize);
   const gridY = Math.floor((e.clientY - rect.top + viewportY) / cellsize);
 
@@ -249,7 +242,6 @@ function resetZoom() {
 }
 
 function applyZoom() {
-  // Update cell size based on new zoom level
   cellsize = baseCellSize * zoomLevel;
   
   const canvas = document.getElementById('board');
