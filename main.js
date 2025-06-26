@@ -11,6 +11,13 @@ function setup()
   maxZoom = 1.6;
   gridWidth = 250;  
   gridHeight = 250;
+
+  // Adjust grid size for mobile devices
+  if (window.matchMedia("(max-width: 768px)").matches) {
+    gridWidth = Math.floor(gridWidth * 0.5);
+    gridHeight = Math.floor(gridHeight * 0.5);
+  }
+  
   viewportX = 0;
   viewportY = 0;
 
