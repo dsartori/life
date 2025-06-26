@@ -12,10 +12,23 @@ function setup()
   gridWidth = 250;  
   gridHeight = 250;
 
-  // Adjust grid size for mobile devices
-  if (window.matchMedia("(max-width: 768px)").matches) {
-    gridWidth = Math.floor(gridWidth * 0.5);
-    gridHeight = Math.floor(gridHeight * 0.5);
+  // Device type detection using user agent with enhanced pattern
+  const isMobile = /Mobile|Android|iPhone|iPad|iPod|iOS/i.test(navigator.userAgent);
+  
+  // Log detailed device information for troubleshooting
+  console.log("User Agent:", navigator.userAgent);
+  console.log("Is mobile device:", isMobile);
+
+  // Adjust grid size for mobile devices to prevent canvas size warnings
+  if (isMobile) {
+    // Conservative grid size reduction to ensure safety
+    gridWidth = 80;   // Further reduced for iPhone 16's screen
+    gridHeight = 80;
+    
+    // Conservative cell size and zoom settings
+    zoomLevel = 1.0;  // Further reduced base zoom
+    maxZoom = 1.6;    // Limited zoom capability
+    minZoom = 0.2;
   }
   
   viewportX = 0;
